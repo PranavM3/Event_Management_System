@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart Event System</title>
+    <link rel="stylesheet" href="/css/common.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .user-info {
+            text-align: right;
+        }
+        
+        .user-name {
+            font-weight: 600;
+        }
+        
+        .user-role {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+        
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background: white;
+            color: #667eea;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .welcome-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .welcome-section h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .welcome-section p {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .feature-card h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .feature-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .action-tag {
+            background: #f0f0f0;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            color: #666;
+        }
+        
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 2px solid #667eea;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-brand">🎉 Smart Event System</div>
+        <div class="navbar-user">
+            <div class="user-info">
+                <div class="user-name" id="userName">Loading...</div>
+                <div class="user-role" id="userRole">Loading...</div>
+            </div>
+            <button class="btn-logout" onclick="AUTH.logout()">Logout</button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="welcome-section">
+            <h1>Welcome to Your Dashboard!</h1>
+            <p>Manage events, registrations, and feedback all in one place</p>
+        </div>
+        
+        <div class="stats-section" id="statsSection">
+            <!-- Stats will be loaded dynamically -->
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card" onclick="window.location.href='/users.html'">
+                <div class="feature-icon">👤</div>
+                <h3>User Management</h3>
+                <p>Manage user accounts, roles, and permissions with secure authentication</p>
+                <div class="feature-actions">
+                    <span class="action-tag">View Users</span>
+                    <span class="action-tag">Manage Roles</span>
+                    <span class="action-tag">Profile</span>
+                </div>
+            </div>
+            
+            <div class="feature-card" onclick="window.location.href='/events.html'">
+                <div class="feature-icon">📅</div>
+                <h3>Event Management</h3>
+                <p>Create, update, and manage events with detailed information including venue, date, and organizer details</p>
+                <div class="feature-actions">
+                    <span class="action-tag">Create Event</span>
+                    <span class="action-tag">Edit Events</span>
+                    <span class="action-tag">View Details</span>
+                </div>
+            </div>
+            
+            <div class="feature-card" onclick="window.location.href='/registrations.html'">
+                <div class="feature-icon">✅</div>
+                <h3>Registration System</h3>
+                <p>Easy event registration with status tracking, capacity management, and attendance monitoring</p>
+                <div class="feature-actions">
+                    <span class="action-tag">Register</span>
+                    <span class="action-tag">Track Status</span>
+                    <span class="action-tag">Attendance</span>
+                </div>
+            </div>
+            
+            <div class="feature-card" onclick="window.location.href='/feedback.html'">
+                <div class="feature-icon">💬</div>
+                <h3>Feedback System</h3>
+                <p>Collect and manage attendee feedback for continuous improvement with ratings and comments</p>
+                <div class="feature-actions">
+                    <span class="action-tag">Submit Feedback</span>
+                    <span class="action-tag">View Ratings</span>
+                    <span class="action-tag">Analytics</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/auth.js"></script>
+    <script>
+        // Check authentication
+        if (!AUTH.requireAuth()) {
+            // Will redirect to login
+        }
+        
+        // Load user info
+        const userInfo = AUTH.getUserInfo();
+        if (userInfo) {
+            document.getElementById('userName').textContent = `${userInfo.firstName} ${userInfo.lastName}`;
+            const displayRoles = userInfo.roles.map(role => role.replace('ROLE_USER', 'ROLE_PARTICIPANT')).join(', ');
+            document.getElementById('userRole').textContent = displayRoles;
+        }
+        
+        // Hide User Management for participants
+        const isParticipant = AUTH.hasRole('ROLE_USER') && !AUTH.hasRole('ROLE_ADMIN') && !AUTH.hasRole('ROLE_ORGANIZER');
+        if (isParticipant) {
+            // Hide user management card for participants
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach(card => {
+                if (card.onclick && card.onclick.toString().includes('users.html')) {
+                    card.style.display = 'none';
+                }
+            });
+        }
+        
+        // Load dashboard stats
+        async function loadStats() {
+            try {
+                const statsHtml = [];
+                
+                // Get events count
+                try {
+                    const events = await API.get('/events');
+                    statsHtml.push(`
+                        <div class="stat-card" onclick="window.location.href='/events.html'">
+                            <div class="stat-number">${events.length}</div>
+                            <div class="stat-label">Total Events</div>
+                        </div>
+                    `);
+                } catch (e) {
+                    console.log('Could not load events');
+                }
+                
+                // Get my registrations
+                try {
+                    const registrations = await API.get('/registrations/my-registrations');
+                    statsHtml.push(`
+                        <div class="stat-card" onclick="window.location.href='/registrations.html?tab=myRegistrations'">
+                            <div class="stat-number">${registrations.length}</div>
+                            <div class="stat-label">My Registrations</div>
+                        </div>
+                    `);
+                } catch (e) {
+                    console.log('Could not load registrations');
+                }
+                
+                // Get my feedbacks
+                try {
+                    const feedbacks = await API.get('/feedbacks/my-feedbacks');
+                    statsHtml.push(`
+                        <div class="stat-card" onclick="window.location.href='/feedback.html?tab=myFeedback'">
+                            <div class="stat-number">${feedbacks.length}</div>
+                            <div class="stat-label">My Feedbacks</div>
+                        </div>
+                    `);
+                } catch (e) {
+                    console.log('Could not load feedbacks');
+                }
+                
+                // For admins/organizers - show my events
+                if (AUTH.hasRole('ROLE_ORGANIZER') || AUTH.hasRole('ROLE_ADMIN')) {
+                    try {
+                        const myEvents = await API.get('/events/my-events');
+                        statsHtml.push(`
+                            <div class="stat-card" onclick="window.location.href='/events.html'">
+                                <div class="stat-number">${myEvents.length}</div>
+                                <div class="stat-label">My Events</div>
+                            </div>
+                        `);
+                    } catch (e) {
+                        console.log('Could not load my events');
+                    }
+                }
+                
+                document.getElementById('statsSection').innerHTML = statsHtml.join('');
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+        
+        loadStats();
+    </script>
+</body>
+</html>

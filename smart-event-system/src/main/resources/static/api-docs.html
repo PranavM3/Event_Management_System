@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Smart Event System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+        
+        .back-link {
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .back-link:hover {
+            opacity: 1;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .endpoint {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .method {
+            padding: 5px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        
+        .method.post {
+            background: #28a745;
+            color: white;
+        }
+        
+        .method.get {
+            background: #007bff;
+            color: white;
+        }
+        
+        .method.put {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .method.delete {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .endpoint-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .code-block pre {
+            margin: 0;
+        }
+        
+        .label {
+            font-weight: 600;
+            color: #667eea;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+        
+        .auth-required {
+            background: #fff3cd;
+            color: #856404;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .public {
+            background: #d4edda;
+            color: #155724;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-top: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #5568d3;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        
+        table th,
+        table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/" class="back-link">← Back to Home</a>
+            <h1>📚 API Documentation</h1>
+            <p>Complete REST API reference for Smart Event Registration System</p>
+        </div>
+        
+        <div class="content">
+            <!-- Authentication Section -->
+            <div class="section">
+                <h2>🔐 Authentication</h2>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/auth/signup</span>
+                        <span class="public">Public</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Register a new user account. Default role is USER if not specified.
+                    </div>
+                    <div class="label">Request Body:</div>
+                    <div class="code-block"><pre>{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john@example.com",
+  "password": "password123",
+  "phone": "1234567890",
+  "roles": ["user"]  // Options: user, organizer, admin
+}</pre></div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X POST http://localhost:8080/api/auth/signup \
+  -H "Content-Type: application/json" \
+  -d '{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@example.com",
+    "password": "password123",
+    "phone": "1234567890",
+    "roles": ["user"]
+  }'</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/auth/signin</span>
+                        <span class="public">Public</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Login with email and password. Returns JWT token for authentication.
+                    </div>
+                    <div class="label">Request Body:</div>
+                    <div class="code-block"><pre>{
+  "email": "john@example.com",
+  "password": "password123"
+}</pre></div>
+                    <div class="label">Response:</div>
+                    <div class="code-block"><pre>{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "id": 1,
+  "email": "john@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "roles": ["ROLE_USER"]
+}</pre></div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X POST http://localhost:8080/api/auth/signin \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john@example.com",
+    "password": "password123"
+  }'</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+            </div>
+            
+            <!-- Events Section -->
+            <div class="section">
+                <h2>📅 Events</h2>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/api/events</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Get all events. Supports pagination and filtering.
+                    </div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X GET http://localhost:8080/api/events \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/api/events/{id}</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Get a specific event by ID.
+                    </div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X GET http://localhost:8080/api/events/1 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/events</span>
+                        <span class="auth-required">🔒 Auth Required (ORGANIZER/ADMIN)</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Create a new event. Requires ORGANIZER or ADMIN role.
+                    </div>
+                    <div class="label">Request Body:</div>
+                    <div class="code-block"><pre>{
+  "name": "Tech Conference 2025",
+  "description": "Annual technology conference",
+  "location": "Convention Center",
+  "startDate": "2025-12-01T09:00:00",
+  "endDate": "2025-12-01T17:00:00",
+  "capacity": 500,
+  "category": "CONFERENCE"
+}</pre></div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X POST http://localhost:8080/api/events \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Tech Conference 2025",
+    "description": "Annual technology conference",
+    "location": "Convention Center",
+    "startDate": "2025-12-01T09:00:00",
+    "endDate": "2025-12-01T17:00:00",
+    "capacity": 500,
+    "category": "CONFERENCE"
+  }'</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <span class="endpoint-path">/api/events/{id}</span>
+                        <span class="auth-required">🔒 Auth Required (ORGANIZER/ADMIN)</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Update an existing event.
+                    </div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X PUT http://localhost:8080/api/events/1 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Updated Event Name",
+    "description": "Updated description",
+    "location": "New Location",
+    "startDate": "2025-12-01T09:00:00",
+    "endDate": "2025-12-01T17:00:00",
+    "capacity": 600,
+    "category": "CONFERENCE"
+  }'</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method delete">DELETE</span>
+                        <span class="endpoint-path">/api/events/{id}</span>
+                        <span class="auth-required">🔒 Auth Required (ORGANIZER/ADMIN)</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Delete an event.
+                    </div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X DELETE http://localhost:8080/api/events/1 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+            </div>
+            
+            <!-- Registrations Section -->
+            <div class="section">
+                <h2>✅ Registrations</h2>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/registrations</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Register for an event.
+                    </div>
+                    <div class="label">Request Body:</div>
+                    <div class="code-block"><pre>{
+  "eventId": 1
+}</pre></div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X POST http://localhost:8080/api/registrations \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "eventId": 1
+  }'</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/api/registrations/my-registrations</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Get all registrations for the current user.
+                    </div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X GET http://localhost:8080/api/registrations/my-registrations \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method put">PUT</span>
+                        <span class="endpoint-path">/api/registrations/{id}/cancel</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Cancel a registration.
+                    </div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X PUT http://localhost:8080/api/registrations/1/cancel \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+            </div>
+            
+            <!-- Feedback Section -->
+            <div class="section">
+                <h2>💬 Feedback</h2>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint-path">/api/feedback</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Submit feedback for an event.
+                    </div>
+                    <div class="label">Request Body:</div>
+                    <div class="code-block"><pre>{
+  "eventId": 1,
+  "rating": 5,
+  "comment": "Great event! Well organized."
+}</pre></div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X POST http://localhost:8080/api/feedback \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "eventId": 1,
+    "rating": 5,
+    "comment": "Great event! Well organized."
+  }'</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+                
+                <div class="endpoint">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint-path">/api/feedback/event/{eventId}</span>
+                        <span class="auth-required">🔒 Auth Required</span>
+                    </div>
+                    <div class="endpoint-description">
+                        Get all feedback for a specific event.
+                    </div>
+                    <div class="label">cURL Command:</div>
+                    <div class="code-block"><pre>curl -X GET http://localhost:8080/api/feedback/event/1 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"</pre></div>
+                    <button class="copy-btn" onclick="copyCode(this)">Copy cURL</button>
+                </div>
+            </div>
+            
+            <!-- Authentication Info -->
+            <div class="section">
+                <h2>🔑 Using JWT Authentication</h2>
+                <p style="margin-bottom: 15px;">After logging in, you'll receive a JWT token. Include this token in the Authorization header for all protected endpoints:</p>
+                <div class="code-block"><pre>Authorization: Bearer YOUR_JWT_TOKEN_HERE</pre></div>
+                
+                <h3 style="margin-top: 30px; color: #667eea;">Example Workflow:</h3>
+                <ol style="margin-top: 15px; line-height: 2;">
+                    <li><strong>Register:</strong> POST to /api/auth/signup</li>
+                    <li><strong>Login:</strong> POST to /api/auth/signin (save the token)</li>
+                    <li><strong>Use Token:</strong> Add "Authorization: Bearer {token}" header to all requests</li>
+                    <li><strong>Access Protected Resources:</strong> Make requests to events, registrations, etc.</li>
+                </ol>
+            </div>
+            
+            <!-- Event Categories -->
+            <div class="section">
+                <h2>📋 Event Categories</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>CONFERENCE</td>
+                            <td>Professional conferences and summits</td>
+                        </tr>
+                        <tr>
+                            <td>WORKSHOP</td>
+                            <td>Hands-on training and learning sessions</td>
+                        </tr>
+                        <tr>
+                            <td>SEMINAR</td>
+                            <td>Educational seminars and talks</td>
+                        </tr>
+                        <tr>
+                            <td>MEETUP</td>
+                            <td>Casual networking and community meetups</td>
+                        </tr>
+                        <tr>
+                            <td>WEBINAR</td>
+                            <td>Online virtual events</td>
+                        </tr>
+                        <tr>
+                            <td>OTHER</td>
+                            <td>Other types of events</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function copyCode(button) {
+            const codeBlock = button.previousElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = button.textContent;
+                button.textContent = '✓ Copied!';
+                button.style.background = '#28a745';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#667eea';
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

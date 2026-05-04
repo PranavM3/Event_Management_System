@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management - Smart Event Managing System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .btn-back {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-back:hover {
+            background: white;
+            color: #667eea;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-header h1 {
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #218838;
+        }
+        
+        .filters-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .filters {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-weight: 600;
+        }
+        
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        
+        .event-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+        
+        .event-title {
+            font-size: 1.3em;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .event-category {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+        
+        .event-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .event-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .event-detail {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #666;
+            font-size: 0.95em;
+        }
+        
+        .event-detail-icon {
+            color: #667eea;
+            font-weight: bold;
+        }
+        
+        .event-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .event-actions button {
+            flex: 1;
+            padding: 8px;
+            font-size: 0.9em;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal.show {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .modal-header h2 {
+            color: #333;
+        }
+        
+        .btn-close {
+            background: none;
+            border: none;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .status-draft { background: #ffc107; color: #333; }
+        .status-published { background: #28a745; color: white; }
+        .status-cancelled { background: #dc3545; color: white; }
+        .status-completed { background: #6c757d; color: white; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/dashboard.html" class="btn-back">← Back to Dashboard</a>
+            <div class="navbar-brand">📅 Event Management</div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="page-header">
+            <h1>
+                <span>📅</span>
+                <span>Manage Events</span>
+            </h1>
+            <button class="btn btn-primary" onclick="showCreateModal()" id="createBtn" style="display: none;">
+                + Create New Event
+            </button>
+        </div>
+        
+        <div class="filters-section">
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Search Events</label>
+                    <input type="text" id="searchInput" placeholder="Search by name or location..." onkeyup="filterEvents()">
+                </div>
+                <div class="filter-group">
+                    <label>Category</label>
+                    <select id="categoryFilter" onchange="filterEvents()">
+                        <option value="">All Categories</option>
+                        <option value="CONFERENCE">Conference</option>
+                        <option value="WORKSHOP">Workshop</option>
+                        <option value="SEMINAR">Seminar</option>
+                        <option value="MEETUP">Meetup</option>
+                        <option value="WEBINAR">Webinar</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select id="statusFilter" onchange="filterEvents()">
+                        <option value="">All Status</option>
+                        <option value="DRAFT">Draft</option>
+                        <option value="UPCOMING">Upcoming</option>
+                        <option value="ONGOING">Ongoing</option>
+                        <option value="CANCELLED">Cancelled</option>
+                        <option value="COMPLETED">Completed</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="events-grid" id="eventsGrid">
+            <!-- Events will be loaded here -->
+        </div>
+    </div>
+    
+    <!-- Create/Edit Event Modal -->
+    <div class="modal" id="eventModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create New Event</h2>
+                <button class="btn-close" onclick="closeModal()">&times;</button>
+            </div>
+            <form id="eventForm" onsubmit="saveEvent(event)">
+                <input type="hidden" id="eventId">
+                
+                <div class="form-group">
+                    <label>Event Name *</label>
+                    <input type="text" id="eventName" required placeholder="e.g., Tech Conference 2025">
+                </div>
+                
+                <div class="form-group">
+                    <label>Description *</label>
+                    <textarea id="eventDescription" required placeholder="Describe your event in detail..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="eventCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="CONFERENCE">Conference</option>
+                            <option value="WORKSHOP">Workshop</option>
+                            <option value="SEMINAR">Seminar</option>
+                            <option value="MEETUP">Meetup</option>
+                            <option value="WEBINAR">Webinar</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Capacity *</label>
+                        <input type="number" id="eventCapacity" required min="1" placeholder="e.g., 100">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Location/Venue *</label>
+                    <input type="text" id="eventLocation" required placeholder="e.g., Convention Center, Room 101">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Start Date & Time *</label>
+                        <input type="datetime-local" id="eventStartDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>End Date & Time *</label>
+                        <input type="datetime-local" id="eventEndDate" required>
+                    </div>
+                </div>
+                
+                <div class="form-group" id="statusGroup" style="display: none;">
+                    <label>Status</label>
+                    <select id="eventStatus">
+                        <option value="DRAFT">Draft</option>
+                        <option value="UPCOMING">Upcoming</option>
+                        <option value="ONGOING">Ongoing</option>
+                        <option value="CANCELLED">Cancelled</option>
+                        <option value="COMPLETED">Completed</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin-top: 25px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">Save Event</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="/js/auth.js"></script>
+    <script>
+        // Check authentication
+        if (!AUTH.requireAuth()) {
+            // Will redirect to login
+        }
+        
+        let allEvents = [];
+        let currentEditId = null;
+        
+        // Check if user can create events
+        if (AUTH.hasRole('ROLE_ORGANIZER') || AUTH.hasRole('ROLE_ADMIN')) {
+            document.getElementById('createBtn').style.display = 'block';
+        }
+        
+        // Load events
+        async function loadEvents() {
+            try {
+                UI.showLoading(true);
+                allEvents = await API.get('/events');
+                displayEvents(allEvents);
+            } catch (error) {
+                UI.showMessage('Error loading events: ' + error.message, 'error');
+            } finally {
+                UI.showLoading(false);
+            }
+        }
+        
+        function displayEvents(events) {
+            const grid = document.getElementById('eventsGrid');
+            
+            if (events.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <h3>No Events Found</h3>
+                        <p>There are no events matching your criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = events.map(event => `
+                <div class="event-card">
+                    <div class="event-header">
+                        <div>
+                            <div class="event-title">${event.title}</div>
+                            <span class="status-badge status-${event.status.toLowerCase()}">${event.status}</span>
+                        </div>
+                        ${event.category ? `<span class="event-category">${event.category}</span>` : ''}
+                    </div>
+                    
+                    <div class="event-description">${event.description}</div>
+                    
+                    <div class="event-details">
+                        <div class="event-detail">
+                            <span class="event-detail-icon">📍</span>
+                            <span>${event.location}</span>
+                        </div>
+                        <div class="event-detail">
+                            <span class="event-detail-icon">📅</span>
+                            <span>${UI.formatDate(event.startDateTime)}</span>
+                        </div>
+                        <div class="event-detail">
+                            <span class="event-detail-icon">⏰</span>
+                            <span>${UI.formatDate(event.endDateTime)}</span>
+                        </div>
+                        <div class="event-detail">
+                            <span class="event-detail-icon">👥</span>
+                            <span>Capacity: ${event.maxParticipants} | Registered: ${event.currentParticipants || 0}</span>
+                        </div>
+                        <div class="event-detail">
+                            <span class="event-detail-icon">👤</span>
+                            <span>Organizer: ${event.organizerName || 'N/A'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="event-actions">
+                        ${canEditEvent(event) ? `
+                            <button class="btn btn-secondary" onclick="editEvent(${event.id})">Edit</button>
+                            <button class="btn btn-danger" onclick="deleteEvent(${event.id})">Delete</button>
+                        ` : ''}
+                        ${!AUTH.hasRole('ROLE_USER') ? `
+                            <button class="btn btn-success" onclick="viewDetails(${event.id})">View Details</button>
+                        ` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function canEditEvent(event) {
+            if (AUTH.hasRole('ROLE_ADMIN')) return true;
+            const userInfo = AUTH.getUserInfo();
+            return AUTH.hasRole('ROLE_ORGANIZER') && event.organizerId === userInfo.id;
+        }
+        
+        function filterEvents() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const category = document.getElementById('categoryFilter').value;
+            const status = document.getElementById('statusFilter').value;
+            
+            const filtered = allEvents.filter(event => {
+                const matchSearch = event.title.toLowerCase().includes(search) || 
+                                  event.location.toLowerCase().includes(search);
+                const matchCategory = !category || event.category === category;
+                const matchStatus = !status || event.status === status;
+                
+                return matchSearch && matchCategory && matchStatus;
+            });
+            
+            displayEvents(filtered);
+        }
+        
+        function showCreateModal() {
+            currentEditId = null;
+            document.getElementById('modalTitle').textContent = 'Create New Event';
+            document.getElementById('eventForm').reset();
+            document.getElementById('eventId').value = '';
+            document.getElementById('statusGroup').style.display = 'none';
+            document.getElementById('eventModal').classList.add('show');
+        }
+        
+        async function editEvent(id) {
+            try {
+                UI.showLoading(true);
+                const event = await API.get(`/events/${id}`);
+                
+                currentEditId = id;
+                document.getElementById('modalTitle').textContent = 'Edit Event';
+                document.getElementById('eventId').value = event.id;
+                document.getElementById('eventName').value = event.title;
+                document.getElementById('eventDescription').value = event.description;
+                document.getElementById('eventCategory').value = event.category || 'OTHER';
+                document.getElementById('eventCapacity').value = event.maxParticipants;
+                document.getElementById('eventLocation').value = event.location;
+                document.getElementById('eventStartDate').value = UI.formatDateInput(event.startDateTime);
+                document.getElementById('eventEndDate').value = UI.formatDateInput(event.endDateTime);
+                document.getElementById('eventStatus').value = event.status;
+                document.getElementById('statusGroup').style.display = 'block';
+                
+                document.getElementById('eventModal').classList.add('show');
+            } catch (error) {
+                UI.showMessage('Error loading event: ' + error.message, 'error');
+            } finally {
+                UI.showLoading(false);
+            }
+        }
+        
+        async function saveEvent(e) {
+            e.preventDefault();
+            
+            const eventData = {
+                title: document.getElementById('eventName').value,
+                description: document.getElementById('eventDescription').value,
+                location: document.getElementById('eventLocation').value,
+                startDateTime: document.getElementById('eventStartDate').value,
+                endDateTime: document.getElementById('eventEndDate').value,
+                maxParticipants: parseInt(document.getElementById('eventCapacity').value),
+                category: document.getElementById('eventCategory') ? document.getElementById('eventCategory').value : null
+            };
+            
+            try {
+                UI.showLoading(true);
+                
+                if (currentEditId) {
+                    // For updates, include status if it's being edited
+                    const statusField = document.getElementById('eventStatus');
+                    if (statusField && statusField.parentElement.style.display !== 'none') {
+                        // Use separate API call to update status
+                        await API.put(`/events/${currentEditId}`, eventData);
+                        
+                        // Update status separately if changed
+                        const selectedStatus = statusField.value;
+                        await API.patch(`/events/${currentEditId}/status?status=${selectedStatus}`);
+                    } else {
+                        await API.put(`/events/${currentEditId}`, eventData);
+                    }
+                    UI.showMessage('Event updated successfully!', 'success');
+                } else {
+                    await API.post('/events', eventData);
+                    UI.showMessage('Event created successfully!', 'success');
+                }
+                
+                closeModal();
+                loadEvents();
+            } catch (error) {
+                UI.showMessage('Error saving event: ' + error.message, 'error');
+            } finally {
+                UI.showLoading(false);
+            }
+        }
+        
+        async function deleteEvent(id) {
+            if (!confirm('Are you sure you want to delete this event?')) return;
+            
+            try {
+                UI.showLoading(true);
+                await API.delete(`/events/${id}`);
+                UI.showMessage('Event deleted successfully!', 'success');
+                loadEvents();
+            } catch (error) {
+                UI.showMessage('Error deleting event: ' + error.message, 'error');
+            } finally {
+                UI.showLoading(false);
+            }
+        }
+        
+        function viewDetails(id) {
+            window.location.href = `/event-details.html?id=${id}`;
+        }
+        
+        function closeModal() {
+            document.getElementById('eventModal').classList.remove('show');
+            document.getElementById('eventForm').reset();
+            currentEditId = null;
+        }
+        
+        // Load events on page load
+        loadEvents();
+    </script>
+</body>
+</html>

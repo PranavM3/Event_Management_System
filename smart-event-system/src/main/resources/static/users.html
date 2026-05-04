@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - Smart Event System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+        
+        .navbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .btn-back {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid white;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-back:hover {
+            background: white;
+            color: #667eea;
+        }
+        
+        .navbar-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .profile-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            color: white;
+        }
+        
+        .profile-info h2 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .profile-role {
+            color: #666;
+            font-size: 1.1em;
+        }
+        
+        .role-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .role-filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .role-filter-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .role-filter-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        .profile-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .detail-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            color: #333;
+            font-size: 1.1em;
+        }
+        
+        .users-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .section-header h2 {
+            color: #333;
+        }
+        
+        .search-box {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            width: 300px;
+        }
+        
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .users-table th {
+            background: #f8f9fa;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #667eea;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .users-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            color: #333;
+        }
+        
+        .users-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .role-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .role-user { background: #e3f2fd; color: #1976d2; }
+        .role-organizer { background: #fff3e0; color: #f57c00; }
+        .role-admin { background: #fce4ec; color: #c2185b; }
+        
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #c82333;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <a href="/dashboard.html" class="btn-back">← Back to Dashboard</a>
+            <div class="navbar-brand">👤 User Management</div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <!-- My Profile Section -->
+        <div class="profile-section">
+            <h2 style="margin-bottom: 20px; color: #667eea;">My Profile</h2>
+            <div class="profile-header">
+                <div class="profile-avatar" id="profileAvatar">👤</div>
+                <div class="profile-info">
+                    <h2 id="profileName">Loading...</h2>
+                    <div class="profile-role" id="profileRole">Loading...</div>
+                </div>
+            </div>
+            <div class="profile-details" id="profileDetails">
+                <!-- Profile details will be loaded here -->
+            </div>
+        </div>
+        
+        <!-- Admin Section - All Users -->
+        <div id="adminSection" style="display: none;">
+            <div class="stats-grid" id="userStats">
+                <!-- Stats will be loaded here -->
+            </div>
+            
+            <div class="users-section">
+                <div class="section-header">
+                    <h2>All Users</h2>
+                    <input type="text" class="search-box" id="searchUsers" placeholder="Search users..." onkeyup="filterUsers()">
+                </div>
+                
+                <table class="users-table" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Roles</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody">
+                        <!-- Users will be loaded here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/auth.js"></script>
+    <script>
+        // Check authentication
+        if (!AUTH.requireAuth()) {
+            // Will redirect to login
+        }
+        
+        let allUsers = [];
+        
+        // Load current user profile
+        async function loadProfile() {
+            try {
+                const userInfo = AUTH.getUserInfo();
+                const profile = await API.get('/users/me');
+                
+                // Update profile display
+                document.getElementById('profileName').textContent = `${profile.firstName} ${profile.lastName}`;
+                const displayRoles = profile.roles.map(role => role.replace('ROLE_USER', 'ROLE_PARTICIPANT')).join(', ');
+                document.getElementById('profileRole').textContent = displayRoles;
+                
+                // Set avatar initial
+                const initial = profile.firstName.charAt(0).toUpperCase();
+                document.getElementById('profileAvatar').textContent = initial;
+                
+                // Display profile details
+                document.getElementById('profileDetails').innerHTML = `
+                    <div class="detail-item">
+                        <div class="detail-label">Email</div>
+                        <div class="detail-value">${profile.email}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">User ID</div>
+                        <div class="detail-value">#${profile.id}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Account Type</div>
+                        <div class="detail-value">${profile.roles.map(r => r.replace('ROLE_USER', 'ROLE_PARTICIPANT')).join(', ')}</div>
+                    </div>
+                `;
+                
+                // If admin, show all users section
+                if (AUTH.hasRole('ROLE_ADMIN')) {
+                    document.getElementById('adminSection').style.display = 'block';
+                    loadAllUsers();
+                }
+            } catch (error) {
+                UI.showMessage('Error loading profile: ' + error.message, 'error');
+            }
+        }
+        
+        // Load all users (admin only)
+        async function loadAllUsers() {
+            try {
+                UI.showLoading(true);
+                allUsers = await API.get('/users');
+                
+                // Calculate stats
+                const totalUsers = allUsers.length;
+                const admins = allUsers.filter(u => u.roles.includes('ROLE_ADMIN')).length;
+                const organizers = allUsers.filter(u => u.roles.includes('ROLE_ORGANIZER')).length;
+                const participants = allUsers.filter(u => u.roles.includes('ROLE_USER')).length;
+                
+                // Display stats
+                document.getElementById('userStats').innerHTML = `
+                    <div class="stat-card" onclick="filterByRole('all')" style="cursor: pointer;">
+                        <div class="stat-number">${totalUsers}</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-card" onclick="filterByRole('admin')" style="cursor: pointer;">
+                        <div class="stat-number">${admins}</div>
+                        <div class="stat-label">Admins</div>
+                    </div>
+                    <div class="stat-card" onclick="filterByRole('organizer')" style="cursor: pointer;">
+                        <div class="stat-number">${organizers}</div>
+                        <div class="stat-label">Organizers</div>
+                    </div>
+                    <div class="stat-card" onclick="filterByRole('participant')" style="cursor: pointer;">
+                        <div class="stat-number">${participants}</div>
+                        <div class="stat-label">Participants</div>
+                    </div>
+                `;
+                
+                displayUsers(allUsers);
+            } catch (error) {
+                UI.showMessage('Error loading users: ' + error.message, 'error');
+            } finally {
+                UI.showLoading(false);
+            }
+        }
+        
+        function displayUsers(users) {
+            const tbody = document.getElementById('usersTableBody');
+            const currentUserId = AUTH.getUserInfo().id;
+            
+            if (users.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">👥</div>
+                                <h3>No Users Found</h3>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = users.map(user => {
+                const roleClass = user.roles.includes('ROLE_ADMIN') ? 'role-admin' : 
+                                 user.roles.includes('ROLE_ORGANIZER') ? 'role-organizer' : 'role-user';
+                const roleText = user.roles.map(r => r.replace('ROLE_USER', 'PARTICIPANT').replace('ROLE_', '')).join(', ');
+                
+                return `
+                    <tr>
+                        <td>${user.firstName} ${user.lastName}</td>
+                        <td>${user.email}</td>
+                        <td>${user.phone || 'N/A'}</td>
+                        <td><span class="role-badge ${roleClass}">${roleText}</span></td>
+                        <td>
+                            ${user.id !== currentUserId ? 
+                                `<button class="btn btn-danger" onclick="deleteUser(${user.id}, '${user.firstName} ${user.lastName}')">Delete</button>` :
+                                '<span style="color: #666;">Current User</span>'
+                            }
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+        
+        let currentRoleFilter = 'all';
+        
+        function filterUsers() {
+            const search = document.getElementById('searchUsers').value.toLowerCase();
+            let filtered = allUsers.filter(user => 
+                user.firstName.toLowerCase().includes(search) ||
+                user.lastName.toLowerCase().includes(search) ||
+                user.email.toLowerCase().includes(search)
+            );
+            
+            // Apply role filter
+            if (currentRoleFilter !== 'all') {
+                filtered = filtered.filter(user => {
+                    if (currentRoleFilter === 'admin') return user.roles.includes('ROLE_ADMIN');
+                    if (currentRoleFilter === 'organizer') return user.roles.includes('ROLE_ORGANIZER');
+                    if (currentRoleFilter === 'participant') return user.roles.includes('ROLE_USER');
+                    return true;
+                });
+            }
+            
+            displayUsers(filtered);
+        }
+        
+        function filterByRole(role) {
+            currentRoleFilter = role;
+            filterUsers();
+        }
+        
+        async function deleteUser(id, name) {
+            if (!confirm(`Are you sure you want to delete user "${name}"?`)) return;
+            
+            try {
+                UI.showLoading(true);
+                await API.delete(`/users/${id}`);
+                UI.showMessage('User deleted successfully!', 'success');
+                loadAllUsers();
+            } catch (error) {
+                UI.showMessage('Error deleting user: ' + error.message, 'error');
+            } finally {
+                UI.showLoading(false);
+            }
+        }
+        
+        // Load profile on page load
+        loadProfile();
+    </script>
+</body>
+</html>
